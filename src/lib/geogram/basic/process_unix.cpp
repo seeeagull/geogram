@@ -72,7 +72,7 @@
 
 #ifdef GEO_OS_APPLE
 #include <mach-o/dyld.h>
-#include <xmmintrin.h>
+// #include <xmmintrin.h>
 #endif
 
 #ifdef GEO_OS_EMSCRIPTEN
@@ -456,10 +456,10 @@ namespace GEO {
 #ifdef GEO_OS_APPLE
            unsigned int excepts = 0
                 // | _MM_MASK_INEXACT   // inexact result
-                   | _MM_MASK_DIV_ZERO  // division by zero
-                   | _MM_MASK_UNDERFLOW // result not representable due to underflow
-                   | _MM_MASK_OVERFLOW  // result not representable due to overflow
-                   | _MM_MASK_INVALID   // invalid operation
+//                    | _MM_MASK_DIV_ZERO  // division by zero
+//                    | _MM_MASK_UNDERFLOW // result not representable due to underflow
+//                    | _MM_MASK_OVERFLOW  // result not representable due to overflow
+//                    | _MM_MASK_INVALID   // invalid operation
                    ;
             // _MM_SET_EXCEPTION_MASK(_MM_GET_EXCEPTION_MASK() & ~excepts);
             geo_argused(flag);
