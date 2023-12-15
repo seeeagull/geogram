@@ -4718,6 +4718,50 @@ namespace GEO {
 
     /************************************************************************/
     
+    bool GEOGRAM_API mesh_construct(
+        const std::vector<std::vector<float>> &verts,
+        const std::vector<std::vector<int>> &faces,
+        Mesh& M
+    ) {
+        M.clear();
+
+        M.vertices.set_dimension(3);
+        for (int i = 0; i < verts.size(); ++i) {
+            index_t v = M.vertices.create_vertex();
+            set_mesh_point(M, v, verts[i].data(), 3);
+        }
+        for (int i = 0; i < faces.size(); ++i) {
+            index_t f = M.facets.create_polygon(faces[i].size());
+            for(index_t j = 0; j < faces[i].size(); ++j) {
+                M.facets.set_vertex(f, j, faces[i][j]);
+            }
+        }
+
+        if(!M.vertices.single_precision()) {
+            index_t nb = M.vertices.nb() * M.vertices.dimension();
+            double* p = M.vertices.point_ptr(0);
+            bool has_nan = false;
+            for(index_t i = 0; i < nb; i++) {
+                if(Numeric::is_nan(*p)) {
+                    has_nan = true;
+                    *p = 0.0;
+                }
+                p++;
+            }
+            if(has_nan) {
+                Logger::warn("I/O") << "Found NaNs in input file" << std::endl;
+            }
+        }
+
+        M.facets.connect();
+        M.cells.connect();
+        if(M.cells.nb() != 0 && M.facets.nb() == 0) {
+            M.cells.compute_borders();
+        }
+        
+        return true;
+    }
+
     bool GEOGRAM_API mesh_load(
         const std::string& filename, Mesh& M,
         const MeshIOFlags& ioflags

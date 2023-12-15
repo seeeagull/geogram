@@ -232,6 +232,19 @@ namespace GEO {
         std::string texture_filename_;
     };
 
+
+    /**
+     * \brief Construct a mesh from vertices and faces information.
+     * \param[in] verts vertices information
+     * \param[in] faces faces information
+     * \param[out] M the loaded mesh
+     * \return true on success, false otherwise.
+     */
+    bool GEOGRAM_API mesh_construct(
+        const std::vector<std::vector<float>> &verts,
+        const std::vector<std::vector<int>> &faces,
+        Mesh& M
+    );
     
     /**
      * \brief Loads a mesh from a file.
